@@ -1,0 +1,32 @@
+.Login-body {
+  background-color: rgb(234, 234, 234);
+  font-size: calc(2px + 2vmin);
+  color: #282c34;
+}
+
+.Login-link {
+  color: #61dafb;
+}
+
+.button {
+  border: 20px solid red;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Login-btn {
+  float: right;
+}
+.Login-btn:disabled {
+  background-color: #666 !important;
+}
+
+.Login-invalid input {
+  border: 1px solid red;
+  background-color: #fff;
+}
+
+.Login-invalid input:focus {
+  border: 1px solid #ff8800;
+  background-color: #fbe8d2;
+}
