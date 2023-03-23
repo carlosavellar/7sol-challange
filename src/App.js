@@ -23,20 +23,14 @@ const App = () => {
     if (isLoading) return <h2>Loading...</h2>;
     if (message) return <h2>{message}</h2>;
     if (!isAuth) {
-      return (
-        <Row>
-          <Col xs={12} sm={2} md={3} lg={4} xxl={4}></Col>
-          <Col>
-            <Login setIsAuth={setIsAuth} isAuth={isAuth} />
-          </Col>
-          <Col xs={12} sm={2} md={3} lg={4} xxl={4}></Col>
-        </Row>
-      );
+      return <Login setIsAuth={setIsAuth} isAuth={isAuth} />;
     } else {
       return (
-        <Row className="movies">
-          <Simulator movies={movies} data-testid="movie" />
-        </Row>
+        <Container className="App-body" md={3}>
+          <Row className="movies">
+            <Simulator movies={movies} data-testid="movie" />
+          </Row>
+        </Container>
       );
     }
   };
@@ -47,12 +41,10 @@ const App = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img className="App-logo" src={logo} alt="The Movies API" />
-      </header>
-      <Container className="App-body" md={3}>
-        {renderContent()}
-      </Container>
+      </header> */}
+      {renderContent()}
     </div>
   );
 };

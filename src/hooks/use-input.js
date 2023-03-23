@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const useInput = (validateValue) => {
   const [enteredValue, setEnteredValue] = useState('');
@@ -19,6 +19,10 @@ const useInput = (validateValue) => {
     setEnteredValue('');
     setIsTouched(false);
   };
+
+  useEffect(() => {
+    console.log(valueIsValid, hasError, 'ww');
+  }, [valueIsValid, hasError]);
 
   return {
     value: enteredValue,
