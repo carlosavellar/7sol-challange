@@ -1,8 +1,16 @@
-const fetchMovies = async () => {
-  const response = await fetch(
-    'https://api.themoviedb.org/3/trending/all/day?api_key=e11274943e564338428e48ffc1fa3059'
-  );
-  return await response.json();
-};
+import axios from 'axios';
 
-export default fetchMovies;
+export const fetchMaterials = async (structure, val, zipCode) => {
+  return await axios
+    .get(`https://api2.77sol.com.br/busca-cep?estrutura=${structure}&valor_conta=${val}&cep=${zipCode}`, {
+      params: {
+        limit: 1000,
+      },
+    })
+    .then((response) => {
+      setGetMaterials(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

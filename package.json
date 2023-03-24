@@ -22,7 +22,9 @@
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
     "react-imask": "^6.4.3",
+    "react-query": "^3.39.3",
     "react-redux": "^8.0.4",
+    "react-router-dom": "^6.9.0",
     "redux-saga": "^1.2.1",
     "validator": "^13.9.0",
     "validator-brazil": "^1.2.2"

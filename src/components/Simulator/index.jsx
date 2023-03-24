@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+
 import PropTypes from 'prop-types';
 import { isCep } from 'validator-brazil';
 
 import AppBar from '@mui/material/AppBar';
-import isValidCep from '@brazilian-utils/is-valid-cep';
 
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -27,6 +29,8 @@ import Form from 'react-bootstrap/Form';
 
 import useInput from './../../hooks/use-input';
 
+import { fetchMaterials } from '../../utils/fetchMaterials';
+
 import './Simulator.css';
 
 function Copyright() {
@@ -43,28 +47,50 @@ function Copyright() {
 }
 
 const Simulator = ({ item }) => {
-  const {
-    value: enteredCep,
-    isValid: cepIsValid,
-    hasError: cepInputError,
-    valueChangeHandler: cepChangedHandler,
-    inputBlurHandler: cepBlurHandler,
-    reset: resetCep,
-  } = useInput((value) => isCep(value));
+  const [getMaterials, setGetMaterials] = useState();
+  const { materials, isLoading, message } = useSelector((state) => state.materialsReducer);
+  const dispatch = useDispatch();
+  const [zipCode, setZipCode] = useState('');
+  const [structure, setStructure] = useState('');
+  const [bill, setBill] = useState('');
 
   const handlerEnteredCep = (e) => {
     console.log(e.target.value);
+    setZipCode(e.target.value);
   };
   const handlerInputStructure = (e) => {
     console.log(e.target.value);
+    setStructure(e.target.value);
   };
   const handlerInputElectricityBill = (e) => {
     console.log(e.target.value);
+    setBill(e.target.value);
+  };
+
+  const fetchMaterials = async (structure, val, zipCode) => {
+    const response = await axios
+      .get(`https://api2.77sol.com.br/busca-cep?estrutura=${structure}&valor_conta=${val}&cep=${zipCode}`, {
+        params: {
+          limit: 1000,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setGetMaterials(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const submitHandler = (e) => {
-    console.log(e);
+    e.preventDefault();
+    fetchMaterials(structure, bill, zipCode);
   };
+
+  useEffect(() => {
+    console.log(getMaterials);
+  }, [getMaterials]);
 
   return (
     <>
@@ -100,15 +126,13 @@ const Simulator = ({ item }) => {
                           <Form.Control
                             as={IMaskInput}
                             mask="00000-000"
-                            placeholder="Enter enteredEmail"
+                            placeholder="Cep"
                             onChange={handlerEnteredCep}
-                            onMouseLeave={() => console.log('leave')}
-                            onBlur={cepBlurHandler}
-                            value={enteredCep}
+                            value={zipCode}
                             autoComplete="cep"
                           />
                         </FloatingLabel>
-                        <Form.Text className="text-muted">{cepInputError && 'Cep invalido'} </Form.Text>
+                        {/* <Form.Text className="text-muted">{cepInputError && 'Cep invalido'} </Form.Text> */}
                       </Form.Group>
                     </Col>
                     <Col>
@@ -130,11 +154,10 @@ const Simulator = ({ item }) => {
                           <Form.Control
                             type="id"
                             as={IMaskInput}
+                            value={bill}
                             mask="00000-000"
                             placeholder="Valor da conta de luz"
                             onChange={handlerInputElectricityBill}
-                            // onBlur={emailBlurHandler}
-                            // value={enteredEmail}
                             autoComplete="username"
                           />
                         </FloatingLabel>
