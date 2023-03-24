@@ -5,6 +5,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { isCep } from 'validator-brazil';
 
+import Parcelamento from './Parcelamento/Index';
+
 import AppBar from '@mui/material/AppBar';
 
 import CardActions from '@mui/material/CardActions';
@@ -17,6 +19,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
+import Stack from '@mui/material/Stack';
+
+import * as api from './../../utils/api';
+
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { IMaskInput } from 'react-imask';
 
@@ -27,11 +33,13 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import FirstData from './FirstData/';
+import Kit from './Kit/';
+
 import useInput from './../../hooks/use-input';
 
-import { fetchMaterials } from '../../utils/fetchMaterials';
-
 import './Simulator.css';
+import { List } from '@mui/material';
 
 function Copyright() {
   return (
@@ -47,7 +55,7 @@ function Copyright() {
 }
 
 const Simulator = ({ item }) => {
-  const [getMaterials, setGetMaterials] = useState();
+  const [getMaterials, setGetMaterials] = useState([]);
   const { materials, isLoading, message } = useSelector((state) => state.materialsReducer);
   const dispatch = useDispatch();
   const [zipCode, setZipCode] = useState('');
@@ -83,14 +91,28 @@ const Simulator = ({ item }) => {
       });
   };
 
+  const selectFirstData = () => {
+    if (getMaterials) {
+      for (let i of getMaterials) {
+        console.log(i);
+      }
+    }
+  };
   const submitHandler = (e) => {
     e.preventDefault();
-    fetchMaterials(structure, bill, zipCode);
+    setGetMaterials(fetchMaterials(structure, bill, zipCode));
+    selectFirstData();
   };
 
+  let renderFirstData = '';
+
   useEffect(() => {
-    console.log(getMaterials);
-  }, [getMaterials]);
+    if (getMaterials.length > 0) {
+      debugger;
+      renderFirstData = <FirstData materials={getMaterials} />;
+    }
+    console.log(Object.values(getMaterials).length);
+  }, [getMaterials, renderFirstData]);
 
   return (
     <>
@@ -182,76 +204,7 @@ const Simulator = ({ item }) => {
         >
           <Container maxWidth="lg">
             <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Irradiância: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Irradiância minima: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Irradiância máxima: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Integradores região: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Integradores mínimo: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Integradores máximo: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Economia: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Valor instalação: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  co2: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  potencyCC: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Performance <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Qtde Inversores: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Índice único: <span>000</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="strong">
-                  Potencia sistema: <span>000</span>
-                </Typography>
-              </Grid>
+              {Object.values(getMaterials).length > 0 ? <FirstData materials={getMaterials} /> : null}
             </Grid>
           </Container>
         </Box>
@@ -264,27 +217,11 @@ const Simulator = ({ item }) => {
         >
           <Container>
             <Typography variant="h4">Parcelamento</Typography>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Word of the Day
-              </Typography>
-              <Typography variant="h5" component="div">
-                be
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                adjective
-              </Typography>
-              <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small" variant="contained">
-                Ver mais
-              </Button>
-            </CardActions>
+            <List component={Stack} direction="row">
+              {Object.values(getMaterials).length > 0
+                ? getMaterials.parcelamento.map((parcel, index) => <Parcelamento parcel={parcel} key={index} />)
+                : 'No content'}
+            </List>
           </Container>
         </Box>
         <Box
@@ -296,27 +233,11 @@ const Simulator = ({ item }) => {
         >
           <Container>
             <Typography variant="h4">Kit</Typography>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Word of the Day
-              </Typography>
-              <Typography variant="h5" component="div">
-                be
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                adjective
-              </Typography>
-              <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small" variant="contained">
-                Ver mais
-              </Button>
-            </CardActions>
+            <List component={Stack} direction="row">
+              {Object.values(getMaterials).length > 0
+                ? getMaterials.kit.map((kitItem, index) => <Kit kitItem={kitItem} key={index} />)
+                : 'No content'}
+            </List>
           </Container>
         </Box>
       </main>

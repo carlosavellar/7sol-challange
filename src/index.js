@@ -5,10 +5,13 @@ import App from './App';
 import { store } from './store/store';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ErrorBoundary from './utils/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </Provider>
 );

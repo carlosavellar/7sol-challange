@@ -26,7 +26,7 @@ const App = () => {
       return (
         <Container className="App-body" md={3}>
           <Row className="movies">
-            <Simulator movies={materials} data-testid="movie" />
+            <Simulator movies={materials} />
           </Row>
         </Container>
       );

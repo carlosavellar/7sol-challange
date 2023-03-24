@@ -5,7 +5,7 @@ export async function AuthServices(setAuth) {
         setAuth(true);
       }
     } catch (error) {
-      return 'Not looged';
+      return 'Not logged';
     }
   };
 }
