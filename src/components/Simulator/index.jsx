@@ -2,15 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
-import PropTypes from 'prop-types';
-import { isCep } from 'validator-brazil';
-
 import Parcelamento from './Parcelamento/Index';
 
 import AppBar from '@mui/material/AppBar';
 
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -20,8 +15,6 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
 import Stack from '@mui/material/Stack';
-
-import * as api from './../../utils/api';
 
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { IMaskInput } from 'react-imask';
@@ -35,8 +28,6 @@ import Form from 'react-bootstrap/Form';
 
 import FirstData from './FirstData/';
 import Kit from './Kit/';
-
-import useInput from './../../hooks/use-input';
 
 import './Simulator.css';
 import { List } from '@mui/material';
@@ -63,15 +54,12 @@ const Simulator = ({ item }) => {
   const [bill, setBill] = useState('');
 
   const handlerEnteredCep = (e) => {
-    console.log(e.target.value);
     setZipCode(e.target.value);
   };
   const handlerInputStructure = (e) => {
-    console.log(e.target.value);
     setStructure(e.target.value);
   };
   const handlerInputElectricityBill = (e) => {
-    console.log(e.target.value);
     setBill(e.target.value);
   };
 
@@ -83,7 +71,6 @@ const Simulator = ({ item }) => {
         },
       })
       .then((response) => {
-        console.log(response);
         setGetMaterials(response.data);
       })
       .catch((err) => {
@@ -91,17 +78,9 @@ const Simulator = ({ item }) => {
       });
   };
 
-  const selectFirstData = () => {
-    if (getMaterials) {
-      for (let i of getMaterials) {
-        console.log(i);
-      }
-    }
-  };
   const submitHandler = (e) => {
     e.preventDefault();
     setGetMaterials(fetchMaterials(structure, bill, zipCode));
-    selectFirstData();
   };
 
   let renderFirstData = '';
@@ -111,7 +90,6 @@ const Simulator = ({ item }) => {
       debugger;
       renderFirstData = <FirstData materials={getMaterials} />;
     }
-    console.log(Object.values(getMaterials).length);
   }, [getMaterials, renderFirstData]);
 
   return (
@@ -154,7 +132,6 @@ const Simulator = ({ item }) => {
                             autoComplete="cep"
                           />
                         </FloatingLabel>
-                        {/* <Form.Text className="text-muted">{cepInputError && 'Cep invalido'} </Form.Text> */}
                       </Form.Group>
                     </Col>
                     <Col>
@@ -243,11 +220,8 @@ const Simulator = ({ item }) => {
       </main>
       {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
         <Typography variant="subtitle1" align="center" color="text.secondary" component="p">
-          Something here to give the footer a purpose!
+          One beatifull End. That's all folks!
         </Typography>
         <Copyright />
       </Box>
